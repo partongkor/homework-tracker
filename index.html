@@ -1,0 +1,599 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework Tracker</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 28px 16px;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    .intro-note {
+      max-width: 650px;
+      margin: 0 auto 18px;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.7;
+      text-align: left;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: auto;
+      padding: 28px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #64748b;
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 7px;
+      font-weight: bold;
+    }
+
+    input,
+    button {
+      font: inherit;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      background: white;
+    }
+
+    input:focus {
+      outline: 2px solid #93c5fd;
+      border-color: #3b82f6;
+    }
+
+    /* ช่องวันที่ช่องเดียว พร้อมไอคอนปฏิทิน */
+    .date-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .date-wrapper input[type="text"] {
+      padding-right: 48px;
+    }
+
+    .date-wrapper input[type="date"] {
+      position: absolute;
+      right: 0;
+      width: 44px;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    #calendarButton {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 44px;
+      height: 100%;
+      border: none;
+      background: transparent;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    #calendarButton:hover {
+      background: #eff6ff;
+      border-radius: 8px;
+    }
+
+    .hint {
+      margin-top: 7px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .add-button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 13px;
+      border: none;
+      border-radius: 9px;
+      background: #2563eb;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .add-button:hover {
+      background: #1d4ed8;
+    }
+
+    .summary {
+      margin: 25px 0 14px;
+      font-weight: bold;
+    }
+
+    #taskList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .task {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 15px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .task-checkbox {
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      cursor: pointer;
+    }
+
+    .task-info {
+      flex: 1;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .task-name {
+      font-weight: bold;
+    }
+
+    .task-date {
+      margin-top: 6px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .status {
+      display: inline-block;
+      margin-top: 7px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .overdue {
+      color: #dc2626;
+    }
+
+    .today {
+      color: #ea580c;
+    }
+
+    .soon {
+      color: #2563eb;
+    }
+
+    .completed .task-name {
+      color: #94a3b8;
+      text-decoration: line-through;
+    }
+
+    .delete-button {
+      padding: 8px 10px;
+      border: none;
+      border-radius: 7px;
+      background: #fee2e2;
+      color: #b91c1c;
+      cursor: pointer;
+    }
+
+    .delete-button:hover {
+      background: #fecaca;
+    }
+
+    .empty {
+      padding: 25px 0;
+      text-align: center;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+      }
+
+      body {
+        padding: 20px 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+    <h1>📚 Homework Tracker</h1>
+    <p class="subtitle">
+      จัดการการบ้านให้เป็นระเบียบ ไม่พลาดวันส่ง
+    </p>
+
+    <form id="taskForm">
+      <label for="taskInput">ชื่อการบ้าน</label>
+      <input
+        id="taskInput"
+        type="text"
+        placeholder="เช่น คณิตศาสตร์ หน้า 25"
+        maxlength="150"
+        required
+      >
+
+      <label for="dueDateText">วันกำหนดส่ง</label>
+
+      <div class="date-wrapper">
+        <input
+          id="dueDateText"
+          type="text"
+          inputmode="numeric"
+          placeholder="วว/ดด/ปปปป"
+          autocomplete="off"
+        >
+
+        <input
+          id="dueDate"
+          type="date"
+          aria-label="เลือกวันที่จากปฏิทิน"
+        >
+
+        <button
+          type="button"
+          id="calendarButton"
+          aria-label="เปิดปฏิทิน"
+          title="เลือกวันจากปฏิทิน"
+        >📅</button>
+      </div>
+
+      <p class="hint">พิมพ์วัน</p>
+
+      <button class="add-button" type="submit">
+        + เพิ่มการบ้าน
+      </button>
+    </form>
+
+    <p id="summary" class="summary"></p>
+    <ul id="taskList"></ul>
+  </main>
+
+  <script>
+    const input = document.getElementById("taskInput");
+    const dueDateInput = document.getElementById("dueDate");
+    const dueDateText = document.getElementById("dueDateText");
+    const calendarButton = document.getElementById("calendarButton");
+    const form = document.getElementById("taskForm");
+    const list = document.getElementById("taskList");
+    const summary = document.getElementById("summary");
+
+    let tasks = [];
+
+    try {
+      tasks = JSON.parse(
+        localStorage.getItem("homeworkTasks") || "[]"
+      );
+
+      if (!Array.isArray(tasks)) {
+        tasks = [];
+      }
+    } catch (error) {
+      tasks = [];
+    }
+
+    // ตรวจสอบวันที่รูปแบบ YYYY-MM-DD
+    function dateValue(dateString) {
+      if (!dateString) return null;
+
+      const parts = dateString.split("-").map(Number);
+
+      if (parts.length !== 3) return null;
+
+      const [year, month, day] = parts;
+      const date = new Date(year, month - 1, day);
+
+      if (
+        date.getFullYear() !== year ||
+        date.getMonth() !== month - 1 ||
+        date.getDate() !== day
+      ) {
+        return null;
+      }
+
+      date.setHours(0, 0, 0, 0);
+      return date;
+    }
+
+    // แปลงวันที่ DD/MM/YYYY เป็น YYYY-MM-DD
+    function parseTypedDate(text) {
+      const match = text.match(
+        /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+      );
+
+      if (!match) return null;
+
+      const day = Number(match[1]);
+      const month = Number(match[2]);
+      const year = Number(match[3]);
+
+      if (year < 1000 || year > 9999) return null;
+
+      const date = new Date(year, month - 1, day);
+
+      if (
+        date.getFullYear() !== year ||
+        date.getMonth() !== month - 1 ||
+        date.getDate() !== day
+      ) {
+        return null;
+      }
+
+      return [
+        String(year).padStart(4, "0"),
+        String(month).padStart(2, "0"),
+        String(day).padStart(2, "0")
+      ].join("-");
+    }
+
+    // แปลงวันที่เป็น DD/MM/YYYY
+    function formatDate(dateString) {
+      const date = dateValue(dateString);
+
+      if (!date) return "ไม่ระบุวันส่ง";
+
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+
+      return `${day}/${month}/${year}`;
+    }
+
+    function todayValue() {
+      const now = new Date();
+
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    }
+
+    // เปิดปฏิทินเมื่อกดไอคอน
+    calendarButton.addEventListener("click", () => {
+      try {
+        if (typeof dueDateInput.showPicker === "function") {
+          dueDateInput.showPicker();
+        } else {
+          dueDateInput.focus();
+          dueDateInput.click();
+        }
+      } catch (error) {
+        dueDateInput.focus();
+      }
+    });
+
+    // เลือกวันจากปฏิทินแล้วแสดงในช่องข้อความ
+    dueDateInput.addEventListener("change", () => {
+      dueDateText.value = dueDateInput.value
+        ? formatDate(dueDateInput.value)
+        : "";
+    });
+
+    // พิมพ์วันที่แล้วอัปเดตช่องปฏิทิน
+    dueDateText.addEventListener("input", () => {
+      const typed = dueDateText.value.trim();
+
+      if (typed === "") {
+        dueDateInput.value = "";
+        return;
+      }
+
+      const parsed = parseTypedDate(typed);
+      dueDateInput.value = parsed || "";
+    });
+
+    function saveTasks() {
+      localStorage.setItem(
+        "homeworkTasks",
+        JSON.stringify(tasks)
+      );
+    }
+
+    // งานที่ยังไม่เสร็จและใกล้ถึงกำหนดจะอยู่ก่อน
+    function sortedTasks() {
+      return [...tasks].sort((a, b) => {
+        if (a.done !== b.done) {
+          return Number(a.done) - Number(b.done);
+        }
+
+        if (!a.dueDate && !b.dueDate) return 0;
+        if (!a.dueDate) return 1;
+        if (!b.dueDate) return -1;
+
+        return a.dueDate.localeCompare(b.dueDate);
+      });
+    }
+
+    function renderTasks() {
+      list.innerHTML = "";
+
+      const completed = tasks.filter(task => task.done).length;
+      const unfinished = tasks.length - completed;
+
+      summary.textContent =
+        `ทั้งหมด ${tasks.length} งาน | ` +
+        `ค้างอยู่ ${unfinished} งาน | ` +
+        `เสร็จแล้ว ${completed} งาน`;
+
+      if (tasks.length === 0) {
+        const empty = document.createElement("li");
+        empty.className = "empty";
+        empty.textContent = "ยังไม่มีการบ้าน ลองเพิ่มงานแรกเลย!";
+        list.appendChild(empty);
+        return;
+      }
+
+      const today = todayValue();
+
+      sortedTasks().forEach(task => {
+        const item = document.createElement("li");
+        item.className = "task";
+
+        if (task.done) {
+          item.classList.add("completed");
+        }
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "task-checkbox";
+        checkbox.checked = task.done;
+        checkbox.setAttribute(
+          "aria-label",
+          "ทำเครื่องหมายการบ้านว่าเสร็จแล้ว"
+        );
+
+        checkbox.addEventListener("change", () => {
+          task.done = checkbox.checked;
+          saveTasks();
+          renderTasks();
+        });
+
+        const info = document.createElement("div");
+        info.className = "task-info";
+
+        const name = document.createElement("div");
+        name.className = "task-name";
+        name.textContent = task.name;
+
+        const date = document.createElement("div");
+        date.className = "task-date";
+        date.textContent =
+          "กำหนดส่ง: " + formatDate(task.dueDate);
+
+        info.appendChild(name);
+        info.appendChild(date);
+
+        if (task.dueDate && !task.done) {
+          const status = document.createElement("div");
+          status.className = "status";
+
+          if (task.dueDate < today) {
+            status.classList.add("overdue");
+            status.textContent = "⚠️ เลยกำหนดส่งแล้ว";
+          } else if (task.dueDate === today) {
+            status.classList.add("today");
+            status.textContent = "🔔 ต้องส่งวันนี้";
+          } else {
+            const due = dateValue(task.dueDate);
+            const current = dateValue(today);
+
+            const daysLeft = Math.round(
+              (due - current) / (1000 * 60 * 60 * 24)
+            );
+
+            if (daysLeft <= 3) {
+              status.classList.add("soon");
+              status.textContent =
+                `ใกล้ถึงกำหนด อีก ${daysLeft} วัน`;
+            } else {
+              status.textContent = `เหลืออีก ${daysLeft} วัน`;
+            }
+          }
+
+          info.appendChild(status);
+        }
+
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "delete-button";
+        deleteButton.textContent = "ลบ";
+
+        deleteButton.addEventListener("click", () => {
+          tasks = tasks.filter(t => t.id !== task.id);
+          saveTasks();
+          renderTasks();
+        });
+
+        item.appendChild(checkbox);
+        item.appendChild(info);
+        item.appendChild(deleteButton);
+
+        list.appendChild(item);
+      });
+    }
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const name = input.value.trim();
+      const typed = dueDateText.value.trim();
+      let dueDate = dueDateInput.value;
+
+      if (!name) {
+        alert("กรุณากรอกชื่อการบ้าน");
+        input.focus();
+        return;
+      }
+
+      if (typed !== "") {
+        const parsed = parseTypedDate(typed);
+
+        if (!parsed) {
+          alert("วันที่ไม่ถูกต้อง กรุณาพิมพ์ เช่น 25/12/2026");
+          dueDateText.focus();
+          return;
+        }
+
+        dueDate = parsed;
+      }
+
+      if (dueDate && !dateValue(dueDate)) {
+        alert("กรุณาเลือกวันที่ให้ถูกต้อง");
+        return;
+      }
+
+      tasks.push({
+        id: Date.now() + Math.random(),
+        name: name,
+        dueDate: dueDate,
+        done: false
+      });
+
+      saveTasks();
+      renderTasks();
+
+      form.reset();
+      input.focus();
+    });
+
+    renderTasks();
+  </script>
+</body>
+</html>
