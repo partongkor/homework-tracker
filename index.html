@@ -1,717 +1,1187 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="A multilingual homework tracker">
-<title>Homework Tracker</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A simple multilingual homework tracker.">
+  <title>Homework Tracker</title>
 
-<style>
-:root {
-  --bg: #f1f5f9;
-  --card: #ffffff;
-  --text: #1e293b;
-  --muted: #64748b;
-  --border: #cbd5e1;
-  --primary: #2563eb;
-  --danger: #dc2626;
-  --success: #15803d;
-  --warning: #c2410c;
-}
+  <style>
+    :root {
+      --primary: #6759e8;
+      --primary-dark: #5143d0;
+      --bg: #f5f6fc;
+      --card: #ffffff;
+      --text: #25263a;
+      --muted: #777b91;
+      --border: #e5e7f0;
+      --green: #159b68;
+      --red: #e24b60;
+      --orange: #d88917;
+    }
 
-* {
-  box-sizing: border-box;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  padding: 24px 12px;
-  font-family: Arial, Helvetica, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 28px 16px;
+    }
 
-.container {
-  width: 100%;
-  max-width: 720px;
-  margin: auto;
-  padding: 24px;
-  background: var(--card);
-  border-radius: 18px;
-  box-shadow: 0 8px 25px #0000000d;
-}
+    button, input, select {
+      font: inherit;
+    }
 
-.topbar {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 8px;
-}
+    button {
+      cursor: pointer;
+    }
 
-select, input, button {
-  font: inherit;
-}
+    .container {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+    }
 
-select, input[type="text"] {
-  min-width: 0;
-  padding: 11px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background: white;
-  color: var(--text);
-}
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
 
-h1 {
-  text-align: center;
-  font-size: clamp(24px, 5vw, 32px);
-  margin-bottom: 5px;
-}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 20px;
+    }
 
-.subtitle {
-  text-align: center;
-  color: var(--muted);
-  margin-top: 0;
-  margin-bottom: 25px;
-}
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      background: var(--primary);
+      color: white;
+      border-radius: 13px;
+      font-size: 23px;
+    }
 
-label {
-  display: block;
-  font-weight: bold;
-  margin: 14px 0 6px;
-}
+    .language-select {
+      width: auto;
+      max-width: 155px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: white;
+      color: var(--text);
+    }
 
-#taskInput, #dateInput {
-  width: 100%;
-}
+    .hero {
+      margin-bottom: 22px;
+    }
 
-button {
-  cursor: pointer;
-  border: none;
-  border-radius: 9px;
-  padding: 10px 14px;
-  font-weight: bold;
-}
+    .hero h1 {
+      font-size: clamp(27px, 5vw, 38px);
+      margin: 0 0 8px;
+      letter-spacing: -0.7px;
+    }
 
-button:focus-visible, input:focus-visible, select:focus-visible {
-  outline: 3px solid #93c5fd;
-  outline-offset: 2px;
-}
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
 
-.add-button {
-  width: 100%;
-  margin-top: 18px;
-  background: var(--primary);
-  color: white;
-  padding: 13px;
-}
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 22px;
+    }
 
-.add-button:hover {
-  background: #1d4ed8;
-}
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 17px;
+      border-radius: 17px;
+      min-width: 0;
+    }
 
-.summary {
-  margin-top: 25px;
-  font-weight: bold;
-}
+    .stat-label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 9px;
+    }
 
-#taskList {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
+    .stat-number {
+      font-size: 27px;
+      font-weight: 800;
+    }
 
-.task {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 15px 0;
-  border-bottom: 1px solid #e2e8f0;
-}
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 6px 24px rgba(35, 38, 80, 0.035);
+    }
 
-.task-checkbox {
-  width: 19px;
-  height: 19px;
-  margin-top: 5px;
-  flex-shrink: 0;
-  cursor: pointer;
-}
+    .panel h2 {
+      margin: 0 0 18px;
+      font-size: 19px;
+    }
 
-.task-info {
-  flex: 1;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
+    .field {
+      margin-bottom: 16px;
+    }
 
-.task-name {
-  font-weight: bold;
-  white-space: pre-wrap;
-}
+    .field label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
 
-.task-date, .status {
-  font-size: 13px;
-  margin-top: 5px;
-}
+    .field input {
+      width: 100%;
+      min-height: 47px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      outline: none;
+      background: #fff;
+      color: var(--text);
+    }
 
-.task-date {
-  color: var(--muted);
-}
+    .field input:focus,
+    .language-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(103, 89, 232, 0.12);
+    }
 
-.status {
-  display: block;
-  font-weight: bold;
-}
+    .hint {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 7px;
+    }
 
-.overdue {
-  color: var(--danger);
-}
+    .primary-btn {
+      width: 100%;
+      min-height: 47px;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: white;
+      background: var(--primary);
+      font-weight: 700;
+      transition: background 0.2s, transform 0.2s;
+    }
 
-.today {
-  color: var(--warning);
-}
+    .primary-btn:hover {
+      background: var(--primary-dark);
+    }
 
-.soon {
-  color: var(--primary);
-}
+    .primary-btn:active {
+      transform: scale(0.99);
+    }
 
-.completed .task-name {
-  text-decoration: line-through;
-  color: #94a3b8;
-}
+    .list-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
 
-.delete-button {
-  background: #fee2e2;
-  color: #b91c1c;
-  flex-shrink: 0;
-}
+    .list-heading h2 {
+      margin: 0;
+      font-size: 19px;
+    }
 
-.delete-button:hover {
-  background: #fecaca;
-}
+    .task-count {
+      color: var(--muted);
+      font-size: 13px;
+    }
 
-.empty {
-  text-align: center;
-  padding: 25px 0;
-  color: var(--muted);
-}
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 17px;
+    }
 
-.footer {
-  text-align: center;
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: 22px;
-}
+    .filter-btn {
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--muted);
+      border-radius: 10px;
+      padding: 9px 13px;
+      font-size: 13px;
+    }
 
-@media (max-width: 480px) {
-  body {
-    padding: 12px 8px;
-  }
+    .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
 
-  .container {
-    padding: 17px;
-  }
+    .task-list {
+      display: grid;
+      gap: 11px;
+    }
 
-  .topbar {
-    justify-content: space-between;
-  }
+    .task {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 15px;
+      min-width: 0;
+    }
 
-  .task {
-    gap: 7px;
-  }
+    .task.done {
+      background: #f9fbfa;
+    }
 
-  .delete-button {
-    padding: 8px;
-  }
-}
-</style>
+    .task-check {
+      width: 20px;
+      height: 20px;
+      margin: 2px 0 0;
+      accent-color: var(--primary);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .task-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .task-title {
+      font-weight: 700;
+      overflow-wrap: anywhere;
+      line-height: 1.5;
+    }
+
+    .task.done .task-title {
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      align-items: center;
+      margin-top: 9px;
+    }
+
+    .date-label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .status {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 8px;
+      border-radius: 7px;
+    }
+
+    .status.pending {
+      background: #efedff;
+      color: #5a4bcf;
+    }
+
+    .status.soon {
+      background: #fff3d9;
+      color: #9a6200;
+    }
+
+    .status.overdue {
+      background: #ffeaed;
+      color: #c52e45;
+    }
+
+    .status.completed {
+      background: #e3f7ee;
+      color: #087a50;
+    }
+
+    .delete-btn {
+      border: none;
+      background: #fff0f1;
+      color: var(--red);
+      border-radius: 9px;
+      padding: 8px 10px;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .delete-btn:hover {
+      background: #ffdde1;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 35px 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .empty-icon {
+      display: block;
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 12px 0 4px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 18px 12px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .brand {
+        font-size: 17px;
+      }
+
+      .brand-icon {
+        width: 36px;
+        height: 36px;
+      }
+
+      .language-select {
+        max-width: 135px;
+        font-size: 12px;
+      }
+
+      .stats {
+        gap: 8px;
+      }
+
+      .stat {
+        padding: 12px 10px;
+        border-radius: 13px;
+      }
+
+      .stat-label {
+        font-size: 11px;
+      }
+
+      .stat-number {
+        font-size: 23px;
+      }
+
+      .panel {
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      .task {
+        padding: 12px;
+        gap: 9px;
+      }
+
+      .delete-btn {
+        padding: 7px 8px;
+      }
+    }
+  </style>
 </head>
 
 <body>
-<main class="container">
+  <main class="container">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-icon">✓</span>
+        <span>StudySpace</span>
+      </div>
 
-  <div class="topbar">
-    <label for="language" id="languageLabel">🌐 ภาษา</label>
-    <select id="language">
-      <option value="th">🇹🇭 ไทย</option>
-      <option value="en">🇬🇧 English</option>
-      <option value="ja">🇯🇵 日本語</option>
-      <option value="zh">🇨🇳 中文</option>
-      <option value="ko">🇰🇷 한국어</option>
-      <option value="es">🇪🇸 Español</option>
-      <option value="fr">🇫🇷 Français</option>
-    </select>
-  </div>
+      <select
+        id="languageSelect"
+        class="language-select"
+        aria-label="Select language"
+      >
+        <option value="th">🇹🇭 ไทย</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="zh">🇨🇳 中文</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="ko">🇰🇷 한국어</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+      </select>
+    </header>
 
-  <h1 id="title">📚 จัดการการบ้าน</h1>
-  <p class="subtitle" id="subtitle">
-    จัดการการบ้านให้เป็นระเบียบ ไม่พลาดวันส่ง
-  </p>
+    <section class="hero">
+      <h1 id="pageTitle">จัดการการบ้านของคุณ ✨</h1>
+      <p id="pageSubtitle">วางแผนงานให้ดี แล้วค่อย ๆ ทำให้สำเร็จทีละอย่าง</p>
+    </section>
 
-  <form id="taskForm">
-    <label for="taskInput" id="taskLabel">ชื่อการบ้าน</label>
-    <input
-      id="taskInput"
-      type="text"
-      maxlength="150"
-      required
-      autocomplete="off"
-      placeholder="เช่น คณิตศาสตร์ หน้า 25"
-    >
+    <section class="stats" aria-label="Homework statistics">
+      <div class="stat">
+        <div class="stat-label" id="totalLabel">งานทั้งหมด</div>
+        <div class="stat-number" id="totalCount">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label" id="pendingLabel">ยังไม่เสร็จ</div>
+        <div class="stat-number" id="pendingCount">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label" id="completedLabel">เสร็จแล้ว</div>
+        <div class="stat-number" id="completedCount">0</div>
+      </div>
+    </section>
 
-    <label for="dateInput" id="dateLabel">วันกำหนดส่ง</label>
-    <input
-  id="dateInput"
-  type="date"
-  required
-  style="width: 100%; min-height: 45px; cursor: pointer;"
->
+    <section class="panel">
+      <h2 id="addHeading">＋ เพิ่มการบ้าน</h2>
 
-    <button class="add-button" id="addButton" type="submit">
-      ＋ เพิ่มการบ้าน
-    </button>
-  </form>
+      <form id="taskForm">
+        <div class="field">
+          <label for="taskInput" id="taskLabel">ชื่อการบ้าน</label>
+          <input
+            id="taskInput"
+            type="text"
+            maxlength="200"
+            placeholder="เช่น ทำรายงานวิชาวิทยาศาสตร์"
+            required
+          >
+        </div>
 
-  <p class="summary" id="summary" aria-live="polite"></p>
-  <ul id="taskList"></ul>
+        <div class="field">
+          <label for="dateInput" id="dateLabel">วันกำหนดส่ง (ไม่บังคับ)</label>
+          <input
+            id="dateInput"
+            type="text"
+            inputmode="text"
+            autocomplete="off"
+            placeholder="เช่น 18/10/2026"
+          >
+          <span class="hint" id="dateHint">
+            พิมพ์วันที่เองได้ เช่น 18/10/2026, 18-10-2026 หรือ 2026-10-18
+          </span>
+        </div>
 
-  <p class="footer" id="footer">
-    ข้อมูลบันทึกไว้ในเบราว์เซอร์ของอุปกรณ์นี้
-  </p>
-</main>
+        <button class="primary-btn" id="addButton" type="submit">
+          ＋ เพิ่มการบ้าน
+        </button>
+      </form>
+    </section>
 
-<script>
-"use strict";
+    <section class="panel">
+      <div class="list-heading">
+        <h2 id="listHeading">📚 รายการการบ้าน</h2>
+        <span class="task-count" id="visibleCount">0 งาน</span>
+      </div>
 
-const translations = {
-  th: {
-    language: "ภาษา",
-    title: "📚 จัดการการบ้าน",
-    subtitle: "จัดการการบ้านให้เป็นระเบียบ ไม่พลาดวันส่ง",
-    task: "ชื่อการบ้าน",
-    placeholder: "เช่น คณิตศาสตร์ หน้า 25",
-    date: "วันกำหนดส่ง",
-    add: "＋ เพิ่มการบ้าน",
-    total: (a, p, d) => `ทั้งหมด ${a} งาน | ค้างอยู่ ${p} งาน | เสร็จแล้ว ${d} งาน`,
-    empty: "ยังไม่มีการบ้าน ลองเพิ่มงานแรกเลย!",
-    due: "กำหนดส่ง: ",
-    noDate: "ไม่ระบุวันส่ง",
-    overdue: "⚠️ เลยกำหนดส่งแล้ว",
-    today: "🔔 ต้องส่งวันนี้",
-    left: n => `เหลืออีก ${n} วัน`,
-    soon: n => `ใกล้ถึงกำหนด อีก ${n} วัน`,
-    delete: "ลบ",
-    invalid: "กรุณากรอกชื่อการบ้าน",
-    footer: "ข้อมูลบันทึกไว้ในเบราว์เซอร์ของอุปกรณ์นี้"
-  },
+      <div class="filters" aria-label="Homework filters">
+        <button class="filter-btn active" data-filter="all" id="filterAll" type="button">ทั้งหมด</button>
+        <button class="filter-btn" data-filter="pending" id="filterPending" type="button">ยังไม่เสร็จ</button>
+        <button class="filter-btn" data-filter="completed" id="filterCompleted" type="button">เสร็จแล้ว</button>
+      </div>
 
-  en: {
-    language: "Language",
-    title: "📚 Homework Tracker",
-    subtitle: "Organize your homework and never miss a deadline.",
-    task: "Homework name",
-    placeholder: "e.g. Mathematics, page 25",
-    date: "Due date",
-    add: "＋ Add homework",
-    total: (a, p, d) => `Total: ${a} | Pending: ${p} | Completed: ${d}`,
-    empty: "No homework yet. Add your first task!",
-    due: "Due: ",
-    noDate: "No due date",
-    overdue: "⚠️ Overdue",
-    today: "🔔 Due today",
-    left: n => `${n} day(s) left`,
-    soon: n => `Due soon — ${n} day(s) left`,
-    delete: "Delete",
-    invalid: "Please enter a homework name.",
-    footer: "Data is saved in this browser on this device."
-  },
+      <div class="task-list" id="taskList"></div>
+    </section>
 
-  ja: {
-    language: "言語",
-    title: "📚 宿題管理",
-    subtitle: "宿題を整理して、提出期限を忘れないようにしましょう。",
-    task: "宿題の名前",
-    placeholder: "例：数学 25ページ",
-    date: "提出期限",
-    add: "＋ 宿題を追加",
-    total: (a, p, d) => `合計 ${a} 件 | 未完了 ${p} 件 | 完了 ${d} 件`,
-    empty: "宿題はまだありません。",
-    due: "提出期限：",
-    noDate: "期限なし",
-    overdue: "⚠️ 期限切れ",
-    today: "🔔 今日が提出期限",
-    left: n => `あと ${n} 日`,
-    soon: n => `期限間近：あと ${n} 日`,
-    delete: "削除",
-    invalid: "宿題の名前を入力してください。",
-    footer: "データはこの端末のブラウザーに保存されます。"
-  },
+    <footer class="footer" id="footerText">
+      ข้อมูลการบ้านบันทึกไว้ในเบราว์เซอร์ของคุณ
+    </footer>
+  </main>
 
-  zh: {
-    language: "语言",
-    title: "📚 作业管理",
-    subtitle: "整理作业，不要错过截止日期。",
-    task: "作业名称",
-    placeholder: "例如：数学，第25页",
-    date: "截止日期",
-    add: "＋ 添加作业",
-    total: (a, p, d) => `共 ${a} 项 | 待完成 ${p} 项 | 已完成 ${d} 项`,
-    empty: "还没有作业，添加第一个任务吧！",
-    due: "截止日期：",
-    noDate: "未设置截止日期",
-    overdue: "⚠️ 已逾期",
-    today: "🔔 今天截止",
-    left: n => `还剩 ${n} 天`,
-    soon: n => `即将截止，还剩 ${n} 天`,
-    delete: "删除",
-    invalid: "请输入作业名称。",
-    footer: "数据保存在此设备的浏览器中。"
-  },
+  <script>
+    "use strict";
 
-  ko: {
-    language: "언어",
-    title: "📚 숙제 관리",
-    subtitle: "숙제를 정리하고 제출 기한을 놓치지 마세요.",
-    task: "숙제 이름",
-    placeholder: "예: 수학 25페이지",
-    date: "제출 기한",
-    add: "＋ 숙제 추가",
-    total: (a, p, d) => `전체 ${a}개 | 미완료 ${p}개 | 완료 ${d}개`,
-    empty: "아직 숙제가 없습니다.",
-    due: "제출 기한: ",
-    noDate: "기한 없음",
-    overdue: "⚠️ 기한 초과",
-    today: "🔔 오늘 마감",
-    left: n => `${n}일 남음`,
-    soon: n => `마감 임박 — ${n}일 남음`,
-    delete: "삭제",
-    invalid: "숙제 이름을 입력하세요.",
-    footer: "데이터는 이 기기의 브라우저에 저장됩니다."
-  },
+    const translations = {
+      th: {
+        title: "จัดการการบ้านของคุณ ✨",
+        subtitle: "วางแผนงานให้ดี แล้วค่อย ๆ ทำให้สำเร็จทีละอย่าง",
+        total: "งานทั้งหมด",
+        pending: "ยังไม่เสร็จ",
+        completed: "เสร็จแล้ว",
+        addHeading: "＋ เพิ่มการบ้าน",
+        taskLabel: "ชื่อการบ้าน",
+        taskPlaceholder: "เช่น ทำรายงานวิชาวิทยาศาสตร์",
+        dateLabel: "วันกำหนดส่ง (ไม่บังคับ)",
+        dateHint: "พิมพ์วันที่เองได้ เช่น 18/10/2026, 18-10-2026 หรือ 2026-10-18",
+        addButton: "＋ เพิ่มการบ้าน",
+        listHeading: "📚 รายการการบ้าน",
+        all: "ทั้งหมด",
+        pendingFilter: "ยังไม่เสร็จ",
+        completedFilter: "เสร็จแล้ว",
+        empty: "ยังไม่มีการบ้านในรายการ",
+        emptyFiltered: "ไม่มีงานในหมวดนี้",
+        emptyIcon: "📝",
+        noDate: "ไม่มีกำหนดส่ง",
+        due: "กำหนดส่ง",
+        overdue: "เลยกำหนด",
+        dueToday: "ส่งวันนี้",
+        dueSoon: "ใกล้ถึงกำหนด",
+        upcoming: "ยังไม่ถึงกำหนด",
+        done: "เสร็จแล้ว",
+        delete: "ลบ",
+        taskUnit: "งาน",
+        invalidDate: "วันที่ไม่ถูกต้อง ลองใช้รูปแบบ 18/10/2026 หรือ 2026-10-18",
+        storageError: "เบราว์เซอร์ไม่สามารถบันทึกข้อมูลได้ในขณะนี้",
+        confirmDelete: "ต้องการลบการบ้านนี้หรือไม่?",
+        footer: "ข้อมูลการบ้านบันทึกไว้ในเบราว์เซอร์ของคุณ"
+      },
+      en: {
+        title: "Manage your homework ✨",
+        subtitle: "Plan your work and finish one task at a time.",
+        total: "Total tasks",
+        pending: "Pending",
+        completed: "Completed",
+        addHeading: "＋ Add homework",
+        taskLabel: "Homework title",
+        taskPlaceholder: "e.g. Science report",
+        dateLabel: "Due date (optional)",
+        dateHint: "Type a date, e.g. 18/10/2026, 18-10-2026 or 2026-10-18",
+        addButton: "＋ Add homework",
+        listHeading: "📚 Homework list",
+        all: "All",
+        pendingFilter: "Pending",
+        completedFilter: "Completed",
+        empty: "No homework yet.",
+        emptyFiltered: "No tasks in this category.",
+        emptyIcon: "📝",
+        noDate: "No due date",
+        due: "Due",
+        overdue: "Overdue",
+        dueToday: "Due today",
+        dueSoon: "Due soon",
+        upcoming: "Upcoming",
+        done: "Completed",
+        delete: "Delete",
+        taskUnit: "tasks",
+        invalidDate: "Invalid date. Try 18/10/2026 or 2026-10-18.",
+        storageError: "Your browser could not save the data.",
+        confirmDelete: "Delete this homework task?",
+        footer: "Your homework is saved in this browser."
+      },
+      zh: {
+        title: "管理你的作业 ✨",
+        subtitle: "合理安排任务，一步一步完成目标。",
+        total: "全部作业",
+        pending: "未完成",
+        completed: "已完成",
+        addHeading: "＋ 添加作业",
+        taskLabel: "作业名称",
+        taskPlaceholder: "例如：科学报告",
+        dateLabel: "截止日期（可选）",
+        dateHint: "可输入日期，例如 18/10/2026、18-10-2026 或 2026-10-18",
+        addButton: "＋ 添加作业",
+        listHeading: "📚 作业列表",
+        all: "全部",
+        pendingFilter: "未完成",
+        completedFilter: "已完成",
+        empty: "还没有作业。",
+        emptyFiltered: "此分类中没有任务。",
+        emptyIcon: "📝",
+        noDate: "没有截止日期",
+        due: "截止",
+        overdue: "已逾期",
+        dueToday: "今天截止",
+        dueSoon: "即将截止",
+        upcoming: "尚未截止",
+        done: "已完成",
+        delete: "删除",
+        taskUnit: "项",
+        invalidDate: "日期无效，请尝试 18/10/2026 或 2026-10-18。",
+        storageError: "浏览器暂时无法保存数据。",
+        confirmDelete: "确定删除这项作业吗？",
+        footer: "作业数据保存在当前浏览器中。"
+      },
+      ja: {
+        title: "宿題を管理しよう ✨",
+        subtitle: "計画を立てて、一つずつ課題を終わらせよう。",
+        total: "すべて",
+        pending: "未完了",
+        completed: "完了",
+        addHeading: "＋ 宿題を追加",
+        taskLabel: "宿題の名前",
+        taskPlaceholder: "例：科学のレポート",
+        dateLabel: "締切日（任意）",
+        dateHint: "例：18/10/2026、18-10-2026、2026-10-18",
+        addButton: "＋ 宿題を追加",
+        listHeading: "📚 宿題リスト",
+        all: "すべて",
+        pendingFilter: "未完了",
+        completedFilter: "完了",
+        empty: "宿題はまだありません。",
+        emptyFiltered: "このカテゴリに課題はありません。",
+        emptyIcon: "📝",
+        noDate: "締切なし",
+        due: "締切",
+        overdue: "期限切れ",
+        dueToday: "今日が締切",
+        dueSoon: "締切間近",
+        upcoming: "期限前",
+        done: "完了",
+        delete: "削除",
+        taskUnit: "件",
+        invalidDate: "日付が正しくありません。18/10/2026 または 2026-10-18 を試してください。",
+        storageError: "ブラウザにデータを保存できませんでした。",
+        confirmDelete: "この宿題を削除しますか？",
+        footer: "宿題のデータはこのブラウザに保存されます。"
+      },
+      ko: {
+        title: "숙제를 관리하세요 ✨",
+        subtitle: "계획을 세우고 하나씩 완료해 보세요.",
+        total: "전체 과제",
+        pending: "미완료",
+        completed: "완료",
+        addHeading: "＋ 숙제 추가",
+        taskLabel: "숙제 이름",
+        taskPlaceholder: "예: 과학 보고서",
+        dateLabel: "마감일 (선택)",
+        dateHint: "예: 18/10/2026, 18-10-2026 또는 2026-10-18",
+        addButton: "＋ 숙제 추가",
+        listHeading: "📚 숙제 목록",
+        all: "전체",
+        pendingFilter: "미완료",
+        completedFilter: "완료",
+        empty: "아직 숙제가 없습니다.",
+        emptyFiltered: "이 분류에는 과제가 없습니다.",
+        emptyIcon: "📝",
+        noDate: "마감일 없음",
+        due: "마감",
+        overdue: "기한 초과",
+        dueToday: "오늘 마감",
+        dueSoon: "마감 임박",
+        upcoming: "마감 전",
+        done: "완료",
+        delete: "삭제",
+        taskUnit: "개",
+        invalidDate: "잘못된 날짜입니다. 18/10/2026 또는 2026-10-18을 입력하세요.",
+        storageError: "브라우저에서 데이터를 저장할 수 없습니다.",
+        confirmDelete: "이 숙제를 삭제하시겠습니까?",
+        footer: "숙제 데이터는 이 브라우저에 저장됩니다."
+      },
+      fr: {
+        title: "Gérez vos devoirs ✨",
+        subtitle: "Organisez votre travail et avancez tâche par tâche.",
+        total: "Total",
+        pending: "À faire",
+        completed: "Terminés",
+        addHeading: "＋ Ajouter un devoir",
+        taskLabel: "Nom du devoir",
+        taskPlaceholder: "Ex. : rapport de sciences",
+        dateLabel: "Date limite (facultative)",
+        dateHint: "Saisissez une date : 18/10/2026, 18-10-2026 ou 2026-10-18",
+        addButton: "＋ Ajouter un devoir",
+        listHeading: "📚 Liste des devoirs",
+        all: "Tous",
+        pendingFilter: "À faire",
+        completedFilter: "Terminés",
+        empty: "Aucun devoir pour le moment.",
+        emptyFiltered: "Aucune tâche dans cette catégorie.",
+        emptyIcon: "📝",
+        noDate: "Sans date limite",
+        due: "Échéance",
+        overdue: "En retard",
+        dueToday: "Pour aujourd'hui",
+        dueSoon: "Bientôt dû",
+        upcoming: "À venir",
+        done: "Terminé",
+        delete: "Supprimer",
+        taskUnit: "tâches",
+        invalidDate: "Date invalide. Essayez 18/10/2026 ou 2026-10-18.",
+        storageError: "Le navigateur n'a pas pu enregistrer les données.",
+        confirmDelete: "Supprimer ce devoir ?",
+        footer: "Vos devoirs sont enregistrés dans ce navigateur."
+      },
+      es: {
+        title: "Organiza tus tareas ✨",
+        subtitle: "Planifica tu trabajo y completa una tarea a la vez.",
+        total: "Total",
+        pending: "Pendientes",
+        completed: "Completadas",
+        addHeading: "＋ Añadir tarea",
+        taskLabel: "Nombre de la tarea",
+        taskPlaceholder: "Ej.: informe de ciencias",
+        dateLabel: "Fecha de entrega (opcional)",
+        dateHint: "Escribe una fecha: 18/10/2026, 18-10-2026 o 2026-10-18",
+        addButton: "＋ Añadir tarea",
+        listHeading: "📚 Lista de tareas",
+        all: "Todas",
+        pendingFilter: "Pendientes",
+        completedFilter: "Completadas",
+        empty: "Todavía no hay tareas.",
+        emptyFiltered: "No hay tareas en esta categoría.",
+        emptyIcon: "📝",
+        noDate: "Sin fecha de entrega",
+        due: "Entrega",
+        overdue: "Atrasada",
+        dueToday: "Para hoy",
+        dueSoon: "Próxima entrega",
+        upcoming: "Pendiente de fecha",
+        done: "Completada",
+        delete: "Eliminar",
+        taskUnit: "tareas",
+        invalidDate: "Fecha no válida. Prueba 18/10/2026 o 2026-10-18.",
+        storageError: "El navegador no pudo guardar los datos.",
+        confirmDelete: "¿Eliminar esta tarea?",
+        footer: "Tus tareas se guardan en este navegador."
+      }
+    };
 
-  es: {
-    language: "Idioma",
-    title: "📚 Organizador de tareas",
-    subtitle: "Organiza tus tareas y no olvides ninguna fecha.",
-    task: "Nombre de la tarea",
-    placeholder: "Ej.: Matemáticas, página 25",
-    date: "Fecha de entrega",
-    add: "＋ Añadir tarea",
-    total: (a, p, d) => `Total: ${a} | Pendientes: ${p} | Completadas: ${d}`,
-    empty: "Todavía no hay tareas. ¡Añade la primera!",
-    due: "Entrega: ",
-    noDate: "Sin fecha de entrega",
-    overdue: "⚠️ Fecha vencida",
-    today: "🔔 Se entrega hoy",
-    left: n => `Quedan ${n} día(s)`,
-    soon: n => `Próxima entrega: ${n} día(s)`,
-    delete: "Eliminar",
-    invalid: "Introduce el nombre de la tarea.",
-    footer: "Las tareas se guardan en este navegador."
-  },
+    const $ = (id) => document.getElementById(id);
 
-  fr: {
-    language: "Langue",
-    title: "📚 Suivi des devoirs",
-    subtitle: "Organisez vos devoirs et ne manquez aucune échéance.",
-    task: "Nom du devoir",
-    placeholder: "Ex. : Mathématiques, page 25",
-    date: "Date limite",
-    add: "＋ Ajouter un devoir",
-    total: (a, p, d) => `Total : ${a} | En attente : ${p} | Terminés : ${d}`,
-    empty: "Aucun devoir pour le moment.",
-    due: "Date limite : ",
-    noDate: "Aucune date limite",
-    overdue: "⚠️ En retard",
-    today: "🔔 À rendre aujourd’hui",
-    left: n => `Encore ${n} jour(s)`,
-    soon: n => `Bientôt dû — ${n} jour(s)`,
-    delete: "Supprimer",
-    invalid: "Veuillez saisir le nom du devoir.",
-    footer: "Les devoirs sont enregistrés dans ce navigateur."
-  }
-};
+    const languageSelect = $("languageSelect");
+    const taskForm = $("taskForm");
+    const taskInput = $("taskInput");
+    const dateInput = $("dateInput");
+    const taskList = $("taskList");
 
-const $ = id => document.getElementById(id);
+    let language = "th";
+    let currentFilter = "all";
+    let tasks = loadTasks();
 
-const languageSelect = $("language");
-const taskInput = $("taskInput");
-const dateInput = $("dateInput");
-const taskForm = $("taskForm");
-const taskList = $("taskList");
-
-let tasks = [];
-let language = "th";
-
-try {
-  const saved = JSON.parse(
-    localStorage.getItem("homeworkTasks") || "[]"
-  );
-
-  if (Array.isArray(saved)) {
-    tasks = saved
-      .filter(t =>
-        t &&
-        typeof t.name === "string" &&
-        typeof t.done === "boolean"
-      )
-      .map(t => ({
-        id: t.id ?? String(Date.now() + Math.random()),
-        name: t.name,
-        dueDate: typeof t.dueDate === "string" ? t.dueDate : "",
-        done: t.done
-      }));
-  }
-
-  const savedLanguage = localStorage.getItem("homeworkLanguage");
-
-  if (savedLanguage && translations[savedLanguage]) {
-    language = savedLanguage;
-  } else {
-    const browserLanguage =
-      (navigator.language || "en").slice(0, 2).toLowerCase();
-
-    language = translations[browserLanguage]
-      ? browserLanguage
-      : "en";
-  }
-} catch (error) {
-  tasks = [];
-  language = "en";
-}
-
-function t() {
-  return translations[language] || translations.en;
-}
-
-function todayISO() {
-  const now = new Date();
-
-  return [
-    now.getFullYear(),
-    String(now.getMonth() + 1).padStart(2, "0"),
-    String(now.getDate()).padStart(2, "0")
-  ].join("-");
-}
-
-function validDate(value) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-    return false;
-  }
-
-  const [year, month, day] = value.split("-").map(Number);
-  const date = new Date(year, month - 1, day);
-
-  return date.getFullYear() === year &&
-    date.getMonth() === month - 1 &&
-    date.getDate() === day;
-}
-
-function saveTasks() {
-  try {
-    localStorage.setItem(
-      "homeworkTasks",
-      JSON.stringify(tasks)
-    );
-  } catch (error) {
-    alert("Unable to save data in this browser.");
-  }
-}
-
-function saveLanguage() {
-  try {
-    localStorage.setItem("homeworkLanguage", language);
-  } catch (error) {
-    // The page can still work if storage is unavailable.
-  }
-}
-
-function formatDate(value) {
-  if (!value || !validDate(value)) {
-    return t().noDate;
-  }
-
-  const [year, month, day] = value.split("-");
-
-  if (language === "en") {
-    return `${month}/${day}/${year}`;
-  }
-
-  return `${day}/${month}/${year}`;
-}
-
-function applyLanguage() {
-  const text = t();
-
-  document.documentElement.lang = language;
-  document.title = text.title.replace("📚 ", "");
-
-  $("languageLabel").textContent = "🌐 " + text.language;
-  languageSelect.setAttribute("aria-label", text.language);
-  $("title").textContent = text.title;
-  $("subtitle").textContent = text.subtitle;
-  $("taskLabel").textContent = text.task;
-  taskInput.placeholder = text.placeholder;
-  $("dateLabel").textContent = text.date;
-  $("addButton").textContent = text.add;
-  $("footer").textContent = text.footer;
-
-  languageSelect.value = language;
-
-  renderTasks();
-}
-
-function renderTasks() {
-  const text = t();
-  taskList.replaceChildren();
-
-  const completed = tasks.filter(task => task.done).length;
-  const pending = tasks.length - completed;
-
-  $("summary").textContent =
-    text.total(tasks.length, pending, completed);
-
-  if (tasks.length === 0) {
-    const empty = document.createElement("li");
-    empty.className = "empty";
-    empty.textContent = text.empty;
-    taskList.appendChild(empty);
-    return;
-  }
-
-  const today = todayISO();
-
-  const sorted = [...tasks].sort((a, b) => {
-    if (a.done !== b.done) {
-      return Number(a.done) - Number(b.done);
+    function t() {
+      return translations[language] || translations.en;
     }
 
-    if (!a.dueDate) return 1;
-    if (!b.dueDate) return -1;
+    function loadTasks() {
+      try {
+        const saved = localStorage.getItem("studyspace-homework-v1");
+        const parsed = saved ? JSON.parse(saved) : [];
 
-    return a.dueDate.localeCompare(b.dueDate);
-  });
+        if (!Array.isArray(parsed)) return [];
 
-  sorted.forEach(task => {
-    const item = document.createElement("li");
-    item.className = "task";
-
-    if (task.done) {
-      item.classList.add("completed");
+        return parsed.filter((task) =>
+          task &&
+          typeof task.id === "string" &&
+          typeof task.title === "string" &&
+          typeof task.completed === "boolean" &&
+          (task.dueDate === "" ||
+            (typeof task.dueDate === "string" &&
+             /^\d{4}-\d{2}-\d{2}$/.test(task.dueDate)))
+        );
+      } catch (error) {
+        return [];
+      }
     }
 
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.className = "task-checkbox";
-    checkbox.checked = task.done;
-    checkbox.setAttribute("aria-label", task.name);
+    function saveTasks() {
+      try {
+        localStorage.setItem(
+          "studyspace-homework-v1",
+          JSON.stringify(tasks)
+        );
+        return true;
+      } catch (error) {
+        alert(t().storageError);
+        return false;
+      }
+    }
 
-    checkbox.addEventListener("change", () => {
-      task.done = checkbox.checked;
-      saveTasks();
-      renderTasks();
-    });
+    function pad(number) {
+      return String(number).padStart(2, "0");
+    }
 
-    const info = document.createElement("div");
-    info.className = "task-info";
+    function todayISO() {
+      const now = new Date();
+      return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+    }
 
-    const name = document.createElement("div");
-    name.className = "task-name";
-    name.textContent = task.name;
+    // Convert supported date formats to YYYY-MM-DD.
+    // Numeric dates containing slashes or dashes are interpreted as DD/MM/YYYY,
+    // except when the year appears first.
+    function parseFlexibleDate(value) {
+      value = value.trim();
 
-    const date = document.createElement("div");
-    date.className = "task-date";
-    date.textContent = text.due + formatDate(task.dueDate);
+      if (!value) return "";
 
-    info.append(name, date);
+      let year;
+      let month;
+      let day;
+      let match;
 
-    if (task.dueDate && validDate(task.dueDate) && !task.done) {
-      const status = document.createElement("div");
-      status.className = "status";
+      // YYYY-MM-DD, YYYY/MM/DD, YYYY.MM.DD
+      match = value.match(
+        /^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/
+      );
 
-      if (task.dueDate < today) {
-        status.classList.add("overdue");
-        status.textContent = text.overdue;
-      } else if (task.dueDate === today) {
-        status.classList.add("today");
-        status.textContent = text.today;
+      if (match) {
+        year = Number(match[1]);
+        month = Number(match[2]);
+        day = Number(match[3]);
       } else {
-        const [y1, m1, d1] = today.split("-").map(Number);
-        const [y2, m2, d2] = task.dueDate.split("-").map(Number);
+        // DD/MM/YYYY, DD-MM-YYYY, DD.MM.YYYY
+        match = value.match(
+          /^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})$/
+        );
 
-        const start = Date.UTC(y1, m1 - 1, d1);
-        const end = Date.UTC(y2, m2 - 1, d2);
-        const days = Math.round((end - start) / 86400000);
-
-        if (days <= 3) {
-          status.classList.add("soon");
-          status.textContent = text.soon(days);
+        if (match) {
+          day = Number(match[1]);
+          month = Number(match[2]);
+          year = Number(match[3]);
         } else {
-          status.textContent = text.left(days);
+          // Also accept dates such as "18 Oct 2026".
+          const parsed = new Date(value);
+
+          if (Number.isNaN(parsed.getTime())) {
+            return null;
+          }
+
+          year = parsed.getFullYear();
+          month = parsed.getMonth() + 1;
+          day = parsed.getDate();
         }
       }
 
-      info.appendChild(status);
+      if (year < 1000 || year > 9999) {
+        return null;
+      }
+
+      const date = new Date(year, month - 1, day);
+
+      // Reject impossible dates such as 31/02/2026.
+      if (
+        date.getFullYear() !== year ||
+        date.getMonth() !== month - 1 ||
+        date.getDate() !== day
+      ) {
+        return null;
+      }
+
+      return `${year}-${pad(month)}-${pad(day)}`;
     }
 
-    const deleteButton = document.createElement("button");
-    deleteButton.type = "button";
-    deleteButton.className = "delete-button";
-    deleteButton.textContent = text.delete;
+    function formatDate(isoDate) {
+      if (!isoDate) return "";
 
-    deleteButton.addEventListener("click", () => {
-      tasks = tasks.filter(item => item.id !== task.id);
-      saveTasks();
+      const [year, month, day] = isoDate.split("-").map(Number);
+
+      // Use a fixed locale and UTC to avoid date shifts.
+      const date = new Date(Date.UTC(year, month - 1, day, 12));
+
+      const locales = {
+        th: "th-TH",
+        en: "en-US",
+        zh: "zh-CN",
+        ja: "ja-JP",
+        ko: "ko-KR",
+        fr: "fr-FR",
+        es: "es-ES"
+      };
+
+      return new Intl.DateTimeFormat(locales[language] || "en-US", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        timeZone: "UTC"
+      }).format(date);
+    }
+
+    function dateStatus(task) {
+      if (task.completed) {
+        return { text: t().done, className: "completed" };
+      }
+
+      if (!task.dueDate) {
+        return null;
+      }
+
+      const today = todayISO();
+
+      if (task.dueDate < today) {
+        return { text: t().overdue, className: "overdue" };
+      }
+
+      if (task.dueDate === today) {
+        return { text: t().dueToday, className: "soon" };
+      }
+
+      const difference =
+        (Date.parse(task.dueDate + "T12:00:00Z") -
+         Date.parse(today + "T12:00:00Z")) /
+        86400000;
+
+      if (difference <= 3) {
+        return { text: t().dueSoon, className: "soon" };
+      }
+
+      return { text: t().upcoming, className: "pending" };
+    }
+
+    function makeElement(tag, className, text) {
+      const element = document.createElement(tag);
+
+      if (className) element.className = className;
+      if (text !== undefined) element.textContent = text;
+
+      return element;
+    }
+
+    function renderStats() {
+      $("totalCount").textContent = tasks.length;
+      $("pendingCount").textContent =
+        tasks.filter((task) => !task.completed).length;
+      $("completedCount").textContent =
+        tasks.filter((task) => task.completed).length;
+    }
+
+    function renderTasks() {
+      taskList.replaceChildren();
+
+      const visibleTasks = tasks.filter((task) => {
+        if (currentFilter === "pending") return !task.completed;
+        if (currentFilter === "completed") return task.completed;
+        return true;
+      });
+
+      $("visibleCount").textContent =
+        `${visibleTasks.length} ${t().taskUnit}`;
+
+      if (visibleTasks.length === 0) {
+        const empty = makeElement("div", "empty");
+        empty.appendChild(
+          makeElement("span", "empty-icon", t().emptyIcon)
+        );
+
+        const message =
+          tasks.length === 0 && currentFilter === "all"
+            ? t().empty
+            : t().emptyFiltered;
+
+        empty.appendChild(makeElement("div", "", message));
+        taskList.appendChild(empty);
+        return;
+      }
+
+      // Sort unfinished tasks first, then by due date.
+      visibleTasks.sort((a, b) => {
+        if (a.completed !== b.completed) {
+          return a.completed ? 1 : -1;
+        }
+
+        if (!a.dueDate && b.dueDate) return 1;
+        if (a.dueDate && !b.dueDate) return -1;
+
+        return a.dueDate.localeCompare(b.dueDate);
+      });
+
+      for (const task of visibleTasks) {
+        const card = makeElement(
+          "article",
+          task.completed ? "task done" : "task"
+        );
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "task-check";
+        checkbox.checked = task.completed;
+        checkbox.setAttribute(
+          "aria-label",
+          task.completed ? t().done : t().pending
+        );
+
+        checkbox.addEventListener("change", () => {
+          const oldValue = task.completed;
+          task.completed = checkbox.checked;
+
+          if (!saveTasks()) {
+            task.completed = oldValue;
+          }
+
+          render();
+        });
+
+        const main = makeElement("div", "task-main");
+        main.appendChild(makeElement("div", "task-title", task.title));
+
+        const meta = makeElement("div", "task-meta");
+
+        if (task.dueDate) {
+          meta.appendChild(
+            makeElement(
+              "span",
+              "date-label",
+              `${t().due}: ${formatDate(task.dueDate)}`
+            )
+          );
+        } else {
+          meta.appendChild(makeElement("span", "date-label", t().noDate));
+        }
+
+        const status = dateStatus(task);
+
+        if (status) {
+          meta.appendChild(
+            makeElement("span", `status ${status.className}`, status.text)
+          );
+        }
+
+        main.appendChild(meta);
+
+        const deleteButton = makeElement(
+          "button",
+          "delete-btn",
+          t().delete
+        );
+        deleteButton.type = "button";
+        deleteButton.addEventListener("click", () => {
+          if (!confirm(t().confirmDelete)) return;
+
+          const previousTasks = tasks;
+          tasks = tasks.filter((item) => item.id !== task.id);
+
+          if (!saveTasks()) {
+            tasks = previousTasks;
+          }
+
+          render();
+        });
+
+        card.append(checkbox, main, deleteButton);
+        taskList.appendChild(card);
+      }
+    }
+
+    function renderLanguage() {
+      const text = t();
+
+      document.documentElement.lang = language;
+
+      $("pageTitle").textContent = text.title;
+      $("pageSubtitle").textContent = text.subtitle;
+      $("totalLabel").textContent = text.total;
+      $("pendingLabel").textContent = text.pending;
+      $("completedLabel").textContent = text.completed;
+      $("addHeading").textContent = text.addHeading;
+      $("taskLabel").textContent = text.taskLabel;
+      $("taskInput").placeholder = text.taskPlaceholder;
+      $("dateLabel").textContent = text.dateLabel;
+      $("dateHint").textContent = text.dateHint;
+      $("addButton").textContent = text.addButton;
+      $("listHeading").textContent = text.listHeading;
+      $("filterAll").textContent = text.all;
+      $("filterPending").textContent = text.pendingFilter;
+      $("filterCompleted").textContent = text.completedFilter;
+      $("footerText").textContent = text.footer;
+
+      document.querySelectorAll("[data-filter]").forEach((button) => {
+        button.classList.toggle(
+          "active",
+          button.dataset.filter === currentFilter
+        );
+      });
+    }
+
+    function render() {
+      renderLanguage();
+      renderStats();
       renderTasks();
+    }
+
+    taskForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const title = taskInput.value.trim();
+      const rawDate = dateInput.value.trim();
+
+      if (!title) {
+        taskInput.focus();
+        return;
+      }
+
+      const dueDate = rawDate ? parseFlexibleDate(rawDate) : "";
+
+      if (dueDate === null) {
+        alert(t().invalidDate);
+        dateInput.focus();
+        return;
+      }
+
+      const newTask = {
+        id: (
+          typeof crypto !== "undefined" &&
+          typeof crypto.randomUUID === "function"
+        )
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        title,
+        dueDate,
+        completed: false
+      };
+
+      tasks.push(newTask);
+
+      if (!saveTasks()) {
+        tasks.pop();
+        return;
+      }
+
+      taskInput.value = "";
+      dateInput.value = "";
+      currentFilter = "all";
+      render();
+      taskInput.focus();
     });
 
-    item.append(checkbox, info, deleteButton);
-    taskList.appendChild(item);
-  });
-}
+    languageSelect.addEventListener("change", () => {
+      language = translations[languageSelect.value]
+        ? languageSelect.value
+        : "en";
 
-languageSelect.addEventListener("change", event => {
-  language = translations[event.target.value]
-    ? event.target.value
-    : "en";
+      try {
+        localStorage.setItem("studyspace-language", language);
+      } catch (error) {
+        // Language selection still works for this session.
+      }
 
-  saveLanguage();
-  applyLanguage();
-});
+      render();
+    });
 
-taskForm.addEventListener("submit", event => {
-  event.preventDefault();
+    document.querySelectorAll("[data-filter]").forEach((button) => {
+      button.addEventListener("click", () => {
+        currentFilter = button.dataset.filter;
 
-  const name = taskInput.value.trim();
-  const dueDate = dateInput.value;
+        document.querySelectorAll("[data-filter]").forEach((item) => {
+          item.classList.toggle("active", item === button);
+        });
 
-  if (!name) {
-    alert(t().invalid);
-    taskInput.focus();
-    return;
-  }
+        renderTasks();
+      });
+    });
 
-  if (dueDate && !validDate(dueDate)) {
-    alert("Please select a valid date.");
-    return;
-  }
+    try {
+      const savedLanguage = localStorage.getItem("studyspace-language");
 
-  tasks.push({
-    id: window.crypto && crypto.randomUUID
-      ? crypto.randomUUID()
-      : String(Date.now() + Math.random()),
-    name,
-    dueDate,
-    done: false
-  });
+      if (savedLanguage && translations[savedLanguage]) {
+        language = savedLanguage;
+      }
+    } catch (error) {
+      // Continue with the default language.
+    }
 
-  saveTasks();
-  renderTasks();
-
-  taskForm.reset();
-  taskInput.focus();
-});
-
-applyLanguage();
-</script>
+    languageSelect.value = language;
+    render();
+  </script>
 </body>
 </html>
