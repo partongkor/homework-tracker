@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="A simple multilingual homework tracker.">
-  <title>Homework Tracker</title>
+  <title>StudySpace - Homework Tracker</title>
 
   <style>
     :root {
@@ -16,9 +16,7 @@
       --text: #25263a;
       --muted: #777b91;
       --border: #e5e7f0;
-      --green: #159b68;
       --red: #e24b60;
-      --orange: #d88917;
     }
 
     * {
@@ -28,10 +26,10 @@
     body {
       margin: 0;
       min-height: 100vh;
+      padding: 28px 16px;
       background: var(--bg);
       color: var(--text);
       font-family: Arial, Helvetica, sans-serif;
-      padding: 28px 16px;
     }
 
     button, input, select {
@@ -45,13 +43,13 @@
     .container {
       width: 100%;
       max-width: 760px;
-      margin: 0 auto;
+      margin: auto;
     }
 
     .topbar {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 14px;
       margin-bottom: 24px;
     }
@@ -60,8 +58,8 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-weight: 800;
       font-size: 20px;
+      font-weight: 800;
     }
 
     .brand-icon {
@@ -69,15 +67,15 @@
       place-items: center;
       width: 42px;
       height: 42px;
+      border-radius: 13px;
       background: var(--primary);
       color: white;
-      border-radius: 13px;
       font-size: 23px;
     }
 
     .language-select {
       width: auto;
-      max-width: 155px;
+      max-width: 160px;
       padding: 10px;
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -90,9 +88,8 @@
     }
 
     .hero h1 {
-      font-size: clamp(27px, 5vw, 38px);
       margin: 0 0 8px;
-      letter-spacing: -0.7px;
+      font-size: clamp(27px, 5vw, 38px);
     }
 
     .hero p {
@@ -109,17 +106,17 @@
     }
 
     .stat {
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 17px;
-      border-radius: 17px;
       min-width: 0;
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: white;
     }
 
     .stat-label {
+      margin-bottom: 9px;
       color: var(--muted);
       font-size: 13px;
-      margin-bottom: 9px;
     }
 
     .stat-number {
@@ -128,11 +125,11 @@
     }
 
     .panel {
-      background: var(--card);
+      margin-bottom: 18px;
+      padding: 22px;
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 22px;
-      margin-bottom: 18px;
+      background: white;
       box-shadow: 0 6px 24px rgba(35, 38, 80, 0.035);
     }
 
@@ -147,19 +144,19 @@
 
     .field label {
       display: block;
+      margin-bottom: 8px;
       font-size: 14px;
       font-weight: 700;
-      margin-bottom: 8px;
     }
 
     .field input {
       width: 100%;
       min-height: 47px;
+      padding: 12px 14px;
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 12px 14px;
       outline: none;
-      background: #fff;
+      background: white;
       color: var(--text);
     }
 
@@ -171,30 +168,25 @@
 
     .hint {
       display: block;
+      margin-top: 7px;
       color: var(--muted);
       font-size: 12px;
       line-height: 1.6;
-      margin-top: 7px;
     }
 
     .primary-btn {
       width: 100%;
       min-height: 47px;
+      padding: 12px 16px;
       border: none;
       border-radius: 12px;
-      padding: 12px 16px;
-      color: white;
       background: var(--primary);
+      color: white;
       font-weight: 700;
-      transition: background 0.2s, transform 0.2s;
     }
 
     .primary-btn:hover {
       background: var(--primary-dark);
-    }
-
-    .primary-btn:active {
-      transform: scale(0.99);
     }
 
     .list-heading {
@@ -207,7 +199,6 @@
 
     .list-heading h2 {
       margin: 0;
-      font-size: 19px;
     }
 
     .task-count {
@@ -223,17 +214,17 @@
     }
 
     .filter-btn {
+      padding: 9px 13px;
       border: 1px solid var(--border);
+      border-radius: 10px;
       background: white;
       color: var(--muted);
-      border-radius: 10px;
-      padding: 9px 13px;
       font-size: 13px;
     }
 
     .filter-btn.active {
-      background: var(--primary);
       border-color: var(--primary);
+      background: var(--primary);
       color: white;
     }
 
@@ -246,10 +237,10 @@
       display: flex;
       align-items: flex-start;
       gap: 12px;
+      min-width: 0;
+      padding: 15px;
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 15px;
-      min-width: 0;
     }
 
     .task.done {
@@ -271,8 +262,8 @@
     }
 
     .task-title {
-      font-weight: 700;
       overflow-wrap: anywhere;
+      font-weight: 700;
       line-height: 1.5;
     }
 
@@ -284,22 +275,22 @@
     .task-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 7px;
       align-items: center;
+      gap: 7px;
       margin-top: 9px;
     }
 
     .date-label {
-      font-size: 12px;
       color: var(--muted);
+      font-size: 12px;
     }
 
     .status {
       display: inline-block;
-      font-size: 11px;
-      font-weight: 700;
       padding: 5px 8px;
       border-radius: 7px;
+      font-size: 11px;
+      font-weight: 700;
     }
 
     .status.pending {
@@ -323,47 +314,39 @@
     }
 
     .delete-btn {
+      flex-shrink: 0;
+      padding: 8px 10px;
       border: none;
+      border-radius: 9px;
       background: #fff0f1;
       color: var(--red);
-      border-radius: 9px;
-      padding: 8px 10px;
       font-size: 12px;
-      flex-shrink: 0;
-    }
-
-    .delete-btn:hover {
-      background: #ffdde1;
     }
 
     .empty {
-      text-align: center;
       padding: 35px 12px;
       color: var(--muted);
+      text-align: center;
       line-height: 1.7;
     }
 
     .empty-icon {
       display: block;
-      font-size: 38px;
       margin-bottom: 10px;
+      font-size: 38px;
     }
 
     .footer {
-      text-align: center;
+      padding: 12px 0 4px;
       color: var(--muted);
       font-size: 12px;
-      padding: 12px 0 4px;
       line-height: 1.7;
+      text-align: center;
     }
 
     @media (max-width: 480px) {
       body {
         padding: 18px 12px;
-      }
-
-      .topbar {
-        align-items: flex-start;
       }
 
       .brand {
@@ -403,8 +386,8 @@
       }
 
       .task {
-        padding: 12px;
         gap: 9px;
+        padding: 12px;
       }
 
       .delete-btn {
@@ -422,13 +405,10 @@
         <span>StudySpace</span>
       </div>
 
-      <select
-        id="languageSelect"
-        class="language-select"
-        aria-label="Select language"
-      >
-        <option value="th">🇹🇭 ไทย</option>
+      <select id="languageSelect" class="language-select"
+        aria-label="Select language">
         <option value="en">🇬🇧 English</option>
+        <option value="th">🇹🇭 ไทย</option>
         <option value="zh">🇨🇳 中文</option>
         <option value="ja">🇯🇵 日本語</option>
         <option value="ko">🇰🇷 한국어</option>
@@ -438,117 +418,71 @@
     </header>
 
     <section class="hero">
-      <h1 id="pageTitle">จัดการการบ้านของคุณ ✨</h1>
-      <p id="pageSubtitle">วางแผนงานให้ดี แล้วค่อย ๆ ทำให้สำเร็จทีละอย่าง</p>
+      <h1 id="pageTitle"></h1>
+      <p id="pageSubtitle"></p>
     </section>
 
-    <section class="stats" aria-label="Homework statistics">
+    <section class="stats">
       <div class="stat">
-        <div class="stat-label" id="totalLabel">งานทั้งหมด</div>
+        <div class="stat-label" id="totalLabel"></div>
         <div class="stat-number" id="totalCount">0</div>
       </div>
       <div class="stat">
-        <div class="stat-label" id="pendingLabel">ยังไม่เสร็จ</div>
+        <div class="stat-label" id="pendingLabel"></div>
         <div class="stat-number" id="pendingCount">0</div>
       </div>
       <div class="stat">
-        <div class="stat-label" id="completedLabel">เสร็จแล้ว</div>
+        <div class="stat-label" id="completedLabel"></div>
         <div class="stat-number" id="completedCount">0</div>
       </div>
     </section>
 
     <section class="panel">
-      <h2 id="addHeading">＋ เพิ่มการบ้าน</h2>
+      <h2 id="addHeading"></h2>
 
       <form id="taskForm">
         <div class="field">
-          <label for="taskInput" id="taskLabel">ชื่อการบ้าน</label>
-          <input
-            id="taskInput"
-            type="text"
-            maxlength="200"
-            placeholder="เช่น ทำรายงานวิชาวิทยาศาสตร์"
-            required
-          >
+          <label for="taskInput" id="taskLabel"></label>
+          <input id="taskInput" type="text" maxlength="200"
+            placeholder="e.g. Science report" required>
         </div>
 
         <div class="field">
-          <label for="dateInput" id="dateLabel">วันกำหนดส่ง (ไม่บังคับ)</label>
-          <input
-            id="dateInput"
-            type="text"
-            inputmode="text"
-            autocomplete="off"
-            placeholder="18/10/2026"
-          >
-          <span class="hint" id="dateHint">
-            พิมพ์วันที่เองได้ เช่น 18/10/2026, 18-10-2026 หรือ 2026-10-18
-          </span>
+          <label for="dateInput" id="dateLabel"></label>
+          <input id="dateInput" type="text" inputmode="text"
+            autocomplete="off" placeholder="e.g. 18/10/2026">
+          <span class="hint" id="dateHint"></span>
         </div>
 
-        <button class="primary-btn" id="addButton" type="submit">
-          ＋ เพิ่มการบ้าน
-        </button>
+        <button class="primary-btn" id="addButton" type="submit"></button>
       </form>
     </section>
 
     <section class="panel">
       <div class="list-heading">
-        <h2 id="listHeading">📚 รายการการบ้าน</h2>
-        <span class="task-count" id="visibleCount">0 งาน</span>
+        <h2 id="listHeading"></h2>
+        <span class="task-count" id="visibleCount">0 tasks</span>
       </div>
 
-      <div class="filters" aria-label="Homework filters">
-        <button class="filter-btn active" data-filter="all" id="filterAll" type="button">ทั้งหมด</button>
-        <button class="filter-btn" data-filter="pending" id="filterPending" type="button">ยังไม่เสร็จ</button>
-        <button class="filter-btn" data-filter="completed" id="filterCompleted" type="button">เสร็จแล้ว</button>
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all"
+          id="filterAll" type="button"></button>
+        <button class="filter-btn" data-filter="pending"
+          id="filterPending" type="button"></button>
+        <button class="filter-btn" data-filter="completed"
+          id="filterCompleted" type="button"></button>
       </div>
 
       <div class="task-list" id="taskList"></div>
     </section>
 
-    <footer class="footer" id="footerText">
-      ข้อมูลการบ้านบันทึกไว้ในเบราว์เซอร์ของคุณ
-    </footer>
+    <footer class="footer" id="footerText"></footer>
   </main>
 
   <script>
     "use strict";
 
     const translations = {
-      th: {
-        title: "จัดการการบ้านของคุณ ✨",
-        subtitle: "วางแผนงานให้ดี แล้วค่อย ๆ ทำให้สำเร็จทีละอย่าง",
-        total: "งานทั้งหมด",
-        pending: "ยังไม่เสร็จ",
-        completed: "เสร็จแล้ว",
-        addHeading: "＋ เพิ่มการบ้าน",
-        taskLabel: "ชื่อการบ้าน",
-        taskPlaceholder: "เช่น ทำรายงานวิชาวิทยาศาสตร์",
-        dateLabel: "วันกำหนดส่ง (ไม่บังคับ)",
-        dateHint: "พิมพ์วันที่เองได้ เช่น 18/10/2026, 18-10-2026 หรือ 2026-10-18",
-        addButton: "＋ เพิ่มการบ้าน",
-        listHeading: "📚 รายการการบ้าน",
-        all: "ทั้งหมด",
-        pendingFilter: "ยังไม่เสร็จ",
-        completedFilter: "เสร็จแล้ว",
-        empty: "ยังไม่มีการบ้านในรายการ",
-        emptyFiltered: "ไม่มีงานในหมวดนี้",
-        emptyIcon: "📝",
-        noDate: "ไม่มีกำหนดส่ง",
-        due: "กำหนดส่ง",
-        overdue: "เลยกำหนด",
-        dueToday: "ส่งวันนี้",
-        dueSoon: "ใกล้ถึงกำหนด",
-        upcoming: "ยังไม่ถึงกำหนด",
-        done: "เสร็จแล้ว",
-        delete: "ลบ",
-        taskUnit: "งาน",
-        invalidDate: "วันที่ไม่ถูกต้อง ลองใช้รูปแบบ 18/10/2026 หรือ 2026-10-18",
-        storageError: "เบราว์เซอร์ไม่สามารถบันทึกข้อมูลได้ในขณะนี้",
-        confirmDelete: "ต้องการลบการบ้านนี้หรือไม่?",
-        footer: "ข้อมูลการบ้านบันทึกไว้ในเบราว์เซอร์ของคุณ"
-      },
       en: {
         title: "Manage your homework ✨",
         subtitle: "Plan your work and finish one task at a time.",
@@ -559,7 +493,8 @@
         taskLabel: "Homework title",
         taskPlaceholder: "e.g. Science report",
         dateLabel: "Due date (optional)",
-        dateHint: "Type a date, e.g. 18/10/2026, 18-10-2026 or 2026-10-18",
+        datePlaceholder: "e.g. 18/10/2026",
+        dateHint: "Type a date, e.g. 18/10/2026, 18-10-2026 or 2026-10-18.",
         addButton: "＋ Add homework",
         listHeading: "📚 Homework list",
         all: "All",
@@ -567,7 +502,6 @@
         completedFilter: "Completed",
         empty: "No homework yet.",
         emptyFiltered: "No tasks in this category.",
-        emptyIcon: "📝",
         noDate: "No due date",
         due: "Due",
         overdue: "Overdue",
@@ -582,6 +516,39 @@
         confirmDelete: "Delete this homework task?",
         footer: "Your homework is saved in this browser."
       },
+      th: {
+        title: "จัดการการบ้านของคุณ ✨",
+        subtitle: "วางแผนงานให้ดี แล้วค่อย ๆ ทำให้สำเร็จทีละอย่าง",
+        total: "งานทั้งหมด",
+        pending: "ยังไม่เสร็จ",
+        completed: "เสร็จแล้ว",
+        addHeading: "＋ เพิ่มการบ้าน",
+        taskLabel: "ชื่อการบ้าน",
+        taskPlaceholder: "ตัวอย่าง: ทำรายงานวิทยาศาสตร์",
+        dateLabel: "วันกำหนดส่ง (ไม่บังคับ)",
+        datePlaceholder: "ตัวอย่าง: 18/10/2026",
+        dateHint: "พิมพ์วันที่ได้หลายรูปแบบ เช่น 18/10/2026, 18-10-2026 หรือ 2026-10-18",
+        addButton: "＋ เพิ่มการบ้าน",
+        listHeading: "📚 รายการการบ้าน",
+        all: "ทั้งหมด",
+        pendingFilter: "ยังไม่เสร็จ",
+        completedFilter: "เสร็จแล้ว",
+        empty: "ยังไม่มีการบ้านในรายการ",
+        emptyFiltered: "ไม่มีงานในหมวดนี้",
+        noDate: "ไม่มีกำหนดส่ง",
+        due: "กำหนดส่ง",
+        overdue: "เลยกำหนด",
+        dueToday: "ส่งวันนี้",
+        dueSoon: "ใกล้ถึงกำหนด",
+        upcoming: "ยังไม่ถึงกำหนด",
+        done: "เสร็จแล้ว",
+        delete: "ลบ",
+        taskUnit: "งาน",
+        invalidDate: "วันที่ไม่ถูกต้อง ลองใช้รูปแบบ 18/10/2026 หรือ 2026-10-18",
+        storageError: "เบราว์เซอร์ไม่สามารถบันทึกข้อมูลได้",
+        confirmDelete: "ต้องการลบการบ้านนี้หรือไม่?",
+        footer: "ข้อมูลการบ้านบันทึกไว้ในเบราว์เซอร์นี้"
+      },
       zh: {
         title: "管理你的作业 ✨",
         subtitle: "合理安排任务，一步一步完成目标。",
@@ -592,7 +559,8 @@
         taskLabel: "作业名称",
         taskPlaceholder: "例如：科学报告",
         dateLabel: "截止日期（可选）",
-        dateHint: "可输入日期，例如 18/10/2026、18-10-2026 或 2026-10-18",
+        datePlaceholder: "例如：18/10/2026",
+        dateHint: "可输入日期，例如 18/10/2026、18-10-2026 或 2026-10-18。",
         addButton: "＋ 添加作业",
         listHeading: "📚 作业列表",
         all: "全部",
@@ -600,7 +568,6 @@
         completedFilter: "已完成",
         empty: "还没有作业。",
         emptyFiltered: "此分类中没有任务。",
-        emptyIcon: "📝",
         noDate: "没有截止日期",
         due: "截止",
         overdue: "已逾期",
@@ -625,7 +592,8 @@
         taskLabel: "宿題の名前",
         taskPlaceholder: "例：科学のレポート",
         dateLabel: "締切日（任意）",
-        dateHint: "例：18/10/2026、18-10-2026、2026-10-18",
+        datePlaceholder: "例：18/10/2026",
+        dateHint: "日付を入力できます。例：18/10/2026、18-10-2026、2026-10-18。",
         addButton: "＋ 宿題を追加",
         listHeading: "📚 宿題リスト",
         all: "すべて",
@@ -633,7 +601,6 @@
         completedFilter: "完了",
         empty: "宿題はまだありません。",
         emptyFiltered: "このカテゴリに課題はありません。",
-        emptyIcon: "📝",
         noDate: "締切なし",
         due: "締切",
         overdue: "期限切れ",
@@ -658,7 +625,8 @@
         taskLabel: "숙제 이름",
         taskPlaceholder: "예: 과학 보고서",
         dateLabel: "마감일 (선택)",
-        dateHint: "예: 18/10/2026, 18-10-2026 또는 2026-10-18",
+        datePlaceholder: "예: 18/10/2026",
+        dateHint: "날짜를 입력하세요. 예: 18/10/2026, 18-10-2026 또는 2026-10-18.",
         addButton: "＋ 숙제 추가",
         listHeading: "📚 숙제 목록",
         all: "전체",
@@ -666,7 +634,6 @@
         completedFilter: "완료",
         empty: "아직 숙제가 없습니다.",
         emptyFiltered: "이 분류에는 과제가 없습니다.",
-        emptyIcon: "📝",
         noDate: "마감일 없음",
         due: "마감",
         overdue: "기한 초과",
@@ -691,7 +658,8 @@
         taskLabel: "Nom du devoir",
         taskPlaceholder: "Ex. : rapport de sciences",
         dateLabel: "Date limite (facultative)",
-        dateHint: "Saisissez une date : 18/10/2026, 18-10-2026 ou 2026-10-18",
+        datePlaceholder: "Ex. : 18/10/2026",
+        dateHint: "Saisissez une date : 18/10/2026, 18-10-2026 ou 2026-10-18.",
         addButton: "＋ Ajouter un devoir",
         listHeading: "📚 Liste des devoirs",
         all: "Tous",
@@ -699,7 +667,6 @@
         completedFilter: "Terminés",
         empty: "Aucun devoir pour le moment.",
         emptyFiltered: "Aucune tâche dans cette catégorie.",
-        emptyIcon: "📝",
         noDate: "Sans date limite",
         due: "Échéance",
         overdue: "En retard",
@@ -724,7 +691,8 @@
         taskLabel: "Nombre de la tarea",
         taskPlaceholder: "Ej.: informe de ciencias",
         dateLabel: "Fecha de entrega (opcional)",
-        dateHint: "Escribe una fecha: 18/10/2026, 18-10-2026 o 2026-10-18",
+        datePlaceholder: "Ej.: 18/10/2026",
+        dateHint: "Escribe una fecha: 18/10/2026, 18-10-2026 o 2026-10-18.",
         addButton: "＋ Añadir tarea",
         listHeading: "📚 Lista de tareas",
         all: "Todas",
@@ -732,13 +700,12 @@
         completedFilter: "Completadas",
         empty: "Todavía no hay tareas.",
         emptyFiltered: "No hay tareas en esta categoría.",
-        emptyIcon: "📝",
         noDate: "Sin fecha de entrega",
         due: "Entrega",
         overdue: "Atrasada",
         dueToday: "Para hoy",
         dueSoon: "Próxima entrega",
-        upcoming: "Pendiente de fecha",
+        upcoming: "Próxima",
         done: "Completada",
         delete: "Eliminar",
         taskUnit: "tareas",
@@ -757,6 +724,7 @@
     const dateInput = $("dateInput");
     const taskList = $("taskList");
 
+    // English is the default language for a fresh visit.
     let language = "en";
     let currentFilter = "all";
     let tasks = loadTasks();
@@ -808,9 +776,6 @@
       return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
     }
 
-    // Convert supported date formats to YYYY-MM-DD.
-    // Numeric dates containing slashes or dashes are interpreted as DD/MM/YYYY,
-    // except when the year appears first.
     function parseFlexibleDate(value) {
       value = value.trim();
 
@@ -841,12 +806,10 @@
           month = Number(match[2]);
           year = Number(match[3]);
         } else {
-          // Also accept dates such as "18 Oct 2026".
+          // Accept browser-readable dates such as 18 Oct 2026.
           const parsed = new Date(value);
 
-          if (Number.isNaN(parsed.getTime())) {
-            return null;
-          }
+          if (Number.isNaN(parsed.getTime())) return null;
 
           year = parsed.getFullYear();
           month = parsed.getMonth() + 1;
@@ -854,13 +817,10 @@
         }
       }
 
-      if (year < 1000 || year > 9999) {
-        return null;
-      }
+      if (year < 1000 || year > 9999) return null;
 
       const date = new Date(year, month - 1, day);
 
-      // Reject impossible dates such as 31/02/2026.
       if (
         date.getFullYear() !== year ||
         date.getMonth() !== month - 1 ||
@@ -876,13 +836,11 @@
       if (!isoDate) return "";
 
       const [year, month, day] = isoDate.split("-").map(Number);
-
-      // Use a fixed locale and UTC to avoid date shifts.
       const date = new Date(Date.UTC(year, month - 1, day, 12));
 
       const locales = {
-        th: "th-TH",
         en: "en-US",
+        th: "th-TH",
         zh: "zh-CN",
         ja: "ja-JP",
         ko: "ko-KR",
@@ -903,9 +861,7 @@
         return { text: t().done, className: "completed" };
       }
 
-      if (!task.dueDate) {
-        return null;
-      }
+      if (!task.dueDate) return null;
 
       const today = todayISO();
 
@@ -919,8 +875,7 @@
 
       const difference =
         (Date.parse(task.dueDate + "T12:00:00Z") -
-         Date.parse(today + "T12:00:00Z")) /
-        86400000;
+         Date.parse(today + "T12:00:00Z")) / 86400000;
 
       if (difference <= 3) {
         return { text: t().dueSoon, className: "soon" };
@@ -960,21 +915,20 @@
 
       if (visibleTasks.length === 0) {
         const empty = makeElement("div", "empty");
-        empty.appendChild(
-          makeElement("span", "empty-icon", t().emptyIcon)
-        );
+        empty.appendChild(makeElement("span", "empty-icon", "📝"));
 
-        const message =
+        empty.appendChild(makeElement(
+          "div",
+          "",
           tasks.length === 0 && currentFilter === "all"
             ? t().empty
-            : t().emptyFiltered;
+            : t().emptyFiltered
+        ));
 
-        empty.appendChild(makeElement("div", "", message));
         taskList.appendChild(empty);
         return;
       }
 
-      // Sort unfinished tasks first, then by due date.
       visibleTasks.sort((a, b) => {
         if (a.completed !== b.completed) {
           return a.completed ? 1 : -1;
@@ -996,18 +950,13 @@
         checkbox.type = "checkbox";
         checkbox.className = "task-check";
         checkbox.checked = task.completed;
-        checkbox.setAttribute(
-          "aria-label",
-          task.completed ? t().done : t().pending
-        );
+        checkbox.setAttribute("aria-label", t().done);
 
         checkbox.addEventListener("change", () => {
-          const oldValue = task.completed;
+          const previous = task.completed;
           task.completed = checkbox.checked;
 
-          if (!saveTasks()) {
-            task.completed = oldValue;
-          }
+          if (!saveTasks()) task.completed = previous;
 
           render();
         });
@@ -1018,13 +967,11 @@
         const meta = makeElement("div", "task-meta");
 
         if (task.dueDate) {
-          meta.appendChild(
-            makeElement(
-              "span",
-              "date-label",
-              `${t().due}: ${formatDate(task.dueDate)}`
-            )
-          );
+          meta.appendChild(makeElement(
+            "span",
+            "date-label",
+            `${t().due}: ${formatDate(task.dueDate)}`
+          ));
         } else {
           meta.appendChild(makeElement("span", "date-label", t().noDate));
         }
@@ -1032,28 +979,25 @@
         const status = dateStatus(task);
 
         if (status) {
-          meta.appendChild(
-            makeElement("span", `status ${status.className}`, status.text)
-          );
+          meta.appendChild(makeElement(
+            "span",
+            `status ${status.className}`,
+            status.text
+          ));
         }
 
         main.appendChild(meta);
 
-        const deleteButton = makeElement(
-          "button",
-          "delete-btn",
-          t().delete
-        );
+        const deleteButton = makeElement("button", "delete-btn", t().delete);
         deleteButton.type = "button";
+
         deleteButton.addEventListener("click", () => {
           if (!confirm(t().confirmDelete)) return;
 
           const previousTasks = tasks;
           tasks = tasks.filter((item) => item.id !== task.id);
 
-          if (!saveTasks()) {
-            tasks = previousTasks;
-          }
+          if (!saveTasks()) tasks = previousTasks;
 
           render();
         });
@@ -1077,7 +1021,11 @@
       $("taskLabel").textContent = text.taskLabel;
       $("taskInput").placeholder = text.taskPlaceholder;
       $("dateLabel").textContent = text.dateLabel;
+
+      // These two lines update the date example for every language.
+      $("dateInput").placeholder = text.datePlaceholder;
       $("dateHint").textContent = text.dateHint;
+
       $("addButton").textContent = text.addButton;
       $("listHeading").textContent = text.listHeading;
       $("filterAll").textContent = text.all;
@@ -1140,6 +1088,7 @@
       taskInput.value = "";
       dateInput.value = "";
       currentFilter = "all";
+
       render();
       taskInput.focus();
     });
@@ -1149,38 +1098,19 @@
         ? languageSelect.value
         : "en";
 
-      try {
-        localStorage.setItem("studyspace-language", language);
-      } catch (error) {
-        // Language selection still works for this session.
-      }
-
       render();
     });
 
     document.querySelectorAll("[data-filter]").forEach((button) => {
       button.addEventListener("click", () => {
         currentFilter = button.dataset.filter;
-
-        document.querySelectorAll("[data-filter]").forEach((item) => {
-          item.classList.toggle("active", item === button);
-        });
-
-        renderTasks();
+        render();
       });
     });
 
-    try {
-      const savedLanguage = localStorage.getItem("studyspace-language");
-
-      if (savedLanguage && translations[savedLanguage]) {
-        language = savedLanguage;
-      }
-    } catch (error) {
-      // Continue with the default language.
-    }
-
-    languageSelect.value = language;
+    // Always start in English when the page is opened.
+    // Existing homework is kept, but the language is reset to English.
+    languageSelect.value = "en";
     render();
   </script>
 </body>
